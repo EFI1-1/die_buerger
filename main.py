@@ -114,13 +114,14 @@ def ask_risk(win_amount):
             current_amount *= 2
             amount_label.config(text=f"{current_amount} Punkte")
         else:
-            points -= 100
+            points -= bet_amount
             update_score()
             result_var.set("❌ Verloren – -100 Punkte.")
             risk_win.destroy()
 
     def take_win():
         global points
+        points -= bet_amount
         points += current_amount
         update_score()
         result_var.set(f"✅ {current_amount} Punkte gesichert.")
