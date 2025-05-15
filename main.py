@@ -116,7 +116,7 @@ def ask_risk(win_amount):
         else:
             points -= bet_amount
             update_score()
-            result_var.set("❌ Verloren – -100 Punkte.")
+            result_var.set(f"❌ Verloren – -{bet_amount} Punkte.")
             risk_win.destroy()
 
     def take_win():
