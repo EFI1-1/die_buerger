@@ -28,7 +28,7 @@ spin_button = None
 
 # Tkinter Hauptfenster
 root = tk.Tk()
-root.title("3x3 Slot Maschine")
+root.title("Slot Maschine")
 
 # StringVars
 result_var = tk.StringVar()
@@ -66,7 +66,7 @@ def spin_with_animation():
         line_item = None
 
     if bet_amount == 0:
-        result_var.set("Bitte Einsatz wählen!")
+        result_var.set("Wähle dein Einsatz!")
         return
     if points < bet_amount:
         prompt_loan()
@@ -114,7 +114,7 @@ def ask_risk(win_amount):
             amount_label.config(text=f"{current_amount} Punkte")
         else:
             update_score()
-            result_var.set("❌ Risiko verloren – kein Gewinn.")
+            result_var.set("❌ Verloren – kein Gewinn.")
             risk_win.destroy()
 
     def take_win():
@@ -148,7 +148,7 @@ def finalize_spin(final_board):
         ask_risk(win_amount)
     else:
         points -= bet_amount
-        result_var.set(f"Kein Gewinn 😢 -{bet_amount} Punkte")
+        result_var.set(f"Kein Gewinn 🚬 -{bet_amount} Punkte")
 
     spin_counter += 1
     check_loan_repayment()
@@ -174,9 +174,9 @@ def prompt_loan():
 
     loan_window = tk.Toplevel(root)
     loan_window.title("Bankkredit")
-    tk.Label(loan_window, text="Du hast zu wenig Punkte.\n1000 Punkte Kredit aufnehmen?", font=("Pixel", 12)).pack(pady=10)
-    tk.Button(loan_window, text="Ja, Kredit", command=take_loan).pack(side='left', padx=10, pady=10)
-    tk.Button(loan_window, text="Nein, Spiel beenden", command=exit_game).pack(side='right', padx=10, pady=10)
+    tk.Label(loan_window, text="Du hast keine Punkte mehr.\nMöchtest du ein Kredit von 1k Punkten aufnehmen?", font=("Pixel", 12)).pack(pady=10)
+    tk.Button(loan_window, text="Ja", command=take_loan).pack(side='left', padx=10, pady=10)
+    tk.Button(loan_window, text="Exit", command=exit_game).pack(side='right', padx=10, pady=10)
 
 # Kreditrückzahlung
 def check_loan_repayment():
@@ -200,7 +200,7 @@ def set_bet(bet, window):
 
 def open_bet_window():
     window = tk.Toplevel(root)
-    window.title("Einsatz wählen")
+    window.title("Wähle dein Einsatz!")
     for i, bet in enumerate(range(10, 201, 10)):
         btn = tk.Button(window, text=f"{bet}", font=("Pixel", 12),
                         command=lambda b=bet, w=window: set_bet(b, w))
@@ -218,7 +218,7 @@ line_canvas.place(x=0, y=0)
 # 2. Danach Slot-Symbole erstellen (liegen darüber)
 create_slot_grid(frame)
 
-tk.Button(root, text="Einsatz setzen", font=('Pixel', 14), command=open_bet_window).pack()
+tk.Button(root, text="Einsatz", font=('Pixel', 14), command=open_bet_window).pack()
 tk.Label(root, textvariable=bet_display_var, font=('Pixel', 14)).pack()
 spin_button = tk.Button(root, text="SPIN", font=('Pixel', 16), command=spin_with_animation)
 spin_button.pack(pady=10)
