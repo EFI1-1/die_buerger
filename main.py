@@ -109,14 +109,12 @@ def draw_win_line(coords):
 def ask_risk(win_amount):
     def risk_try():
         nonlocal current_amount
-        global points
         if random.choice([True, False]):
             current_amount *= 2
             amount_label.config(text=f"{current_amount} Punkte")
         else:
-            points -= 100
             update_score()
-            result_var.set("❌ Risiko verloren – -100 Punkte.")
+            result_var.set("❌ Risiko verloren – kein Gewinn.")
             risk_win.destroy()
 
     def take_win():
