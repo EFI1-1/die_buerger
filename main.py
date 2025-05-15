@@ -176,9 +176,9 @@ def prompt_loan():
 
     loan_window = tk.Toplevel(root)
     loan_window.title("Bankkredit")
-    tk.Label(loan_window, text="Du hast keine Punkte mehr.\n1Möchtest du ein Kredit von 1k aufnehmen?", font=("Pixel", 12)).pack(pady=10)
-    tk.Button(loan_window, text="Ja, Kredit", command=take_loan).pack(side='left', padx=10, pady=10)
-    tk.Button(loan_window, text="Nein, Spiel beenden", command=exit_game).pack(side='right', padx=10, pady=10)
+    tk.Label(loan_window, text="Du hast keine Punkte mehr.\nMöchtest du ein Kredit von 1k aufnehmen?", font=("Pixel", 12)).pack(pady=10)
+    tk.Button(loan_window, text="Ja", command=take_loan).pack(side='left', padx=10, pady=10)
+    tk.Button(loan_window, text="Exit", command=exit_game).pack(side='right', padx=10, pady=10)
 
 # Kreditrückzahlung
 def check_loan_repayment():
