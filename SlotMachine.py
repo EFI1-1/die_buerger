@@ -116,7 +116,7 @@ def ask_risk(win_amount):
         else:
             points -= bet_amount
             update_score()
-            result_var.set(f"❌ Verloren – -{bet_amount} Punkte.")
+            result_var.set(f"❌ Verloren -{bet_amount} Punkte.")
             risk_win.destroy()
 
     def take_win():
@@ -190,7 +190,7 @@ def check_loan_repayment():
             result_var.set("💰 Kredit zurückgezahlt.")
             loan_taken = False
         else:
-            result_var.set("❌ Kredit nicht zurückgezahlt. Spiel beendet.")
+            result_var.set("❌ Kredit nicht zurückgezahlt.")
             root.after(3000, root.destroy)
         update_score()
 
