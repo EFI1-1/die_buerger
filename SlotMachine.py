@@ -61,6 +61,7 @@ def update_symbols(random_board):
 # Spin mit Animation
 def spin_with_animation():
     global line_item
+    result_var.set("")
     if line_item:
         line_canvas.delete(line_item)
         line_item = None
