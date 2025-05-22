@@ -8,10 +8,13 @@ class ShopFenster:
         self.fenster.geometry("400x300")
         self.fenster.state('zoomed')
 
-        tk.Label(self.fenster, text="🛒 Willkomen im Shop!",bg="blue", font=("Arial", 18)).pack(pady=20)
+        tk.Label(self.fenster, text="Willkomen im Shop!", font=("Press Start 2P", 40)).pack(pady=20)
 
         lbl_Item1 = tk.Label(self.fenster,bg="blue", font=("Press Start 2P", 1), width= 120, height= 120)
         lbl_Item1.place(x=250, y=100)  # Position in Pixeln (x= Breite Y= Höhe)
+
+        Btn_Item1 = tk.Button(self.fenster, text="SLOTTI KAROTTI", font=("Press Start 2P", 10), relief="solid", bd=3,width=30, height=1, bg="lightgrey")
+        Btn_Item1.place(x=250, y=470)
 
         lbl_Item2 = tk.Label(self.fenster,bg="blue", font=("Press Start 2P", 1), width= 120, height= 120)
         lbl_Item2.place(x=500, y=100)  # Position in Pixeln (x= Breite Y= Höhe)
