@@ -113,10 +113,14 @@ def SlotMachineFenster(master):
 
     def ask_risk(win_amount):
         def risk_try():
-            nonlocal current_amount, points
+            nonlocal current_step, current_amount, points
+            if current_step >= len(steps) - 1:
+                return  # Schon am Ende
+
             if random.choice([True, False]):
+                current_step += 1
                 current_amount *= 2
-                amount_label.config(text=f"{current_amount} Punkte")
+                update_lights()
             else:
                 points -= bet_amount
                 update_score()
@@ -131,14 +135,49 @@ def SlotMachineFenster(master):
             result_var.set(f"✅ {current_amount} Punkte.")
             risk_win.destroy()
 
-        current_amount = win_amount
+        def update_lights():
+            for i, lbl in enumerate(step_labels):
+                if i == current_step:
+                    lbl.config(bg="gray")
+                else:
+                    lbl.config(bg="lightgrey")
+            amount_label.config(text=f"{current_amount} Punkte")
+
+        def blink_current():
+            if current_step < len(step_labels):
+                lbl = step_labels[current_step]
+                current_color = lbl.cget("bg")
+                lbl.config(bg="yellow" if current_color == "gray" else "gray")
+                risk_win.after(500, blink_current)
+
+        steps = [win_amount * (2 ** i) for i in range(6)]  # z.B. 100, 200, 400, ...
+        current_step = 0
+        current_amount = steps[current_step]
+
         risk_win = tk.Toplevel(fenster)
         risk_win.title("Risiko-Spiel: Leiter")
+
         tk.Label(risk_win, text="Risikoleiter – Versuch dein Glück!", font=("Arial", 14)).pack(pady=10)
         amount_label = tk.Label(risk_win, text=f"{current_amount} Punkte", font=("Arial", 18))
         amount_label.pack(pady=10)
-        tk.Button(risk_win, text="Risiko", font=("Arial", 12), command=risk_try).pack(side='left', padx=20, pady=10)
-        tk.Button(risk_win, text="Nehmen", font=("Arial", 12), command=take_win).pack(side='right', padx=20, pady=10)
+
+        # Risikoleiter anzeigen
+        ladder_frame = tk.Frame(risk_win)
+        ladder_frame.pack(pady=10)
+        step_labels = []
+        for i, val in enumerate(reversed(steps)):
+            lbl = tk.Label(ladder_frame, text=f"{val} Punkte", width=20, font=("Arial", 12), bg="gray")
+            lbl.pack()
+            step_labels.insert(0, lbl)  # umgekehrte Reihenfolge
+
+        update_lights()
+        blink_current()
+
+        # Buttons
+        button_frame = tk.Frame(risk_win)
+        button_frame.pack(pady=10)
+        tk.Button(button_frame, text="Risiko", font=("Arial", 12), command=risk_try).pack(side='left', padx=20)
+        tk.Button(button_frame, text="Nehmen", font=("Arial", 12), command=take_win).pack(side='right', padx=20)
 
     def prompt_loan():
         def take_loan():
