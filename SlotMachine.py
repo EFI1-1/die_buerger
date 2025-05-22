@@ -86,6 +86,7 @@ def SlotMachineFenster(master):
 
     def spin_with_animation():
         nonlocal line_item
+        result_var.set("")
         if line_item:
             line_canvas.delete(line_item)
             line_item = None
@@ -127,7 +128,7 @@ def SlotMachineFenster(master):
             points -= bet_amount
             points += current_amount
             update_score()
-            result_var.set(f"✅ {current_amount} Punkte gesichert.")
+            result_var.set(f"✅ {current_amount} Punkte.")
             risk_win.destroy()
 
         current_amount = win_amount
