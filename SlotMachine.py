@@ -36,9 +36,9 @@ def SlotMachineFenster(master):
             row_canvases = []
             row_items = []
             for c in range(cols):
-                canvas = tk.Canvas(parent, width=180, height=180, bg="white")
+                canvas = tk.Canvas(parent, width=120, height=120, bg="white")
                 canvas.grid(row=r, column=c, padx=10, pady=10)
-                item = canvas.create_text(90, 90, text='❓', font=("Arial", 60))
+                item = canvas.create_text(60, 60, text='❓', font=("Arial", 60))
                 row_canvases.append(canvas)
                 row_items.append(item)
             symbol_canvases.append(row_canvases)
