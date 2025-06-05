@@ -15,7 +15,7 @@ def SlotMachineFenster(master):
     symbol_items = []
     line_item = None
 
-    font_game = ("Press Start 2P", 24)
+    font_game = ("Press Start 2P", 18)
 
     fenster = tk.Toplevel(master)
     fenster.state('zoomed')
@@ -36,9 +36,9 @@ def SlotMachineFenster(master):
             row_canvases = []
             row_items = []
             for c in range(cols):
-                canvas = tk.Canvas(parent, width=180, height=180, bg="white")
+                canvas = tk.Canvas(parent, width=150, height=150, bg="white")
                 canvas.grid(row=r, column=c, padx=10, pady=10)
-                item = canvas.create_text(90, 90, text='❓', font=("Arial", 60))
+                item = canvas.create_text(75, 75, text='❓', font=("Arial", 60))
                 row_canvases.append(canvas)
                 row_items.append(item)
             symbol_canvases.append(row_canvases)
@@ -115,52 +115,74 @@ def SlotMachineFenster(master):
         animate(0)
 
     def ask_risk(win_amount):
+        # Erstellt die Stufen der Risikoleiter
         steps = [win_amount * (2 ** i) for i in range(6)]
-        current_step = 0
+        steps.append(0)  # Unterste Stufe 0 Punkte hinzufügen!
+        current_step = 0  # Start auf Stufe 0 (kleinster Gewinn > 0)
+
         current_amount = steps[current_step]
 
         risk_win = tk.Toplevel(fenster)
         risk_win.title("Risiko-Spiel: Leiter")
 
-        tk.Label(risk_win, text="Risikoleiter – Versuch dein Glück!", font=font_game).pack(pady=20)
-        amount_label = tk.Label(risk_win, text=f"{current_amount} Punkte", font=font_game)
+        tk.Label(risk_win, text="Risikoleiter – Versuch dein Glück!", font=("Arial", 28)).pack(pady=20)
+
+        amount_label = tk.Label(risk_win, text=f"{current_amount} Punkte", font=("Arial", 32))
         amount_label.pack(pady=20)
 
         ladder_frame = tk.Frame(risk_win)
         ladder_frame.pack(pady=20)
         step_labels = []
-        for i, val in enumerate(reversed(steps)):
-            lbl = tk.Label(ladder_frame, text=f"{val} Punkte", width=25, font=font_game, bg="gray")
+
+        # 🟢 KEIN reversed(steps) → Normale Reihenfolge: Großer Gewinn oben, 0 unten
+        for i, val in enumerate(steps[::-1]):  # Schritte rückwärts, damit 0 unten ist
+            lbl = tk.Label(ladder_frame, text=f"{val} Punkte", width=25, font=("Arial", 20), bg="gray")
             lbl.pack()
-            step_labels.insert(0, lbl)
+            step_labels.append(lbl)  # Hier normale Reihenfolge beibehalten
 
         def update_lights():
+            """Aktualisiert die Farben der Stufen."""
             for i, lbl in enumerate(step_labels):
-                lbl.config(bg="yellow" if i == current_step else "lightgray")
+                lbl.config(bg="yellow" if i == (len(steps) - 1 - current_step) else "lightgray")
             amount_label.config(text=f"{current_amount} Punkte")
 
         def blink_current():
+            """Blinkt die aktuelle Stufe."""
             if current_step < len(step_labels):
-                lbl = step_labels[current_step]
+                lbl = step_labels[len(steps) - 1 - current_step]
                 current_color = lbl.cget("bg")
                 lbl.config(bg="yellow" if current_color == "lightgray" else "lightgray")
                 risk_win.after(500, blink_current)
 
         def risk_try():
+            """Risiko-Klick."""
             nonlocal current_step, current_amount, points
-            if current_step >= len(steps) - 1:
+            if current_step >= len(steps) - 2:  # Höchste Stufe erreicht
                 return
-            if random.choice([True, False]):
+
+            if random.choice([True, False]):  # 50/50 Chance
                 current_step += 1
-                current_amount *= 2
+                current_amount = steps[current_step]
                 update_lights()
             else:
-                points -= bet_amount
-                update_score()
-                result_var.set(f"Verloren -{bet_amount} Punkte.")
-                risk_win.destroy()
+                # Zwei Stufen zurückfallen
+                if current_step >= 2:
+                    current_step -= 2
+                else:
+                    current_step = len(steps) - 1  # 0 Punkte (letzter Index)
+
+                current_amount = steps[current_step]
+                update_lights()
+
+                # Prüfen ob auf 0 Punkte
+                if current_step == len(steps) - 1:
+                    points -= bet_amount
+                    update_score()
+                    result_var.set(f"❌ Verloren -{bet_amount} Punkte.")
+                    risk_win.destroy()
 
         def take_win():
+            """Gewinn mitnehmen."""
             nonlocal points
             points -= bet_amount
             points += current_amount
@@ -173,8 +195,8 @@ def SlotMachineFenster(master):
 
         button_frame = tk.Frame(risk_win)
         button_frame.pack(pady=20)
-        tk.Button(button_frame, text="Risiko", font=font_game, command=risk_try).pack(side='left', padx=40)
-        tk.Button(button_frame, text="Nehmen", font=font_game, command=take_win).pack(side='right', padx=40)
+        tk.Button(button_frame, text="Risiko", font=("Arial", 18), command=risk_try).pack(side='left', padx=40)
+        tk.Button(button_frame, text="Nehmen", font=("Arial", 18), command=take_win).pack(side='right', padx=40)
 
     def prompt_loan():
         def take_loan():
