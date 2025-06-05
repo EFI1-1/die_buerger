@@ -15,7 +15,7 @@ def SlotMachineFenster(master):
     symbol_items = []
     line_item = None
 
-    font_game = ("Press Start 2P", 18)
+    font_game = ("Press Start 2P", 24)
 
     fenster = tk.Toplevel(master)
     fenster.state('zoomed')
@@ -36,9 +36,9 @@ def SlotMachineFenster(master):
             row_canvases = []
             row_items = []
             for c in range(cols):
-                canvas = tk.Canvas(parent, width=150, height=150, bg="white")
+                canvas = tk.Canvas(parent, width=180, height=180, bg="white")
                 canvas.grid(row=r, column=c, padx=10, pady=10)
-                item = canvas.create_text(75, 75, text='❓', font=("Arial", 60))
+                item = canvas.create_text(90, 90, text='❓', font=("Arial", 60))
                 row_canvases.append(canvas)
                 row_items.append(item)
             symbol_canvases.append(row_canvases)
@@ -241,6 +241,13 @@ def SlotMachineFenster(master):
             btn = tk.Button(window, text=f"{bet}", font=font_game, command=lambda b=bet, w=window: set_bet(b, w))
             btn.grid(row=i // 7, column=i % 7, padx=10, pady=10)
 
+    def zuruck_zum_menu():
+        master.deiconify()
+        master.state('zoomed')
+        fenster.after(25, fenster.destroy)
+
+    zuruck_button = tk.Button(fenster, text="⬅️Menü", font=font_game, command=zuruck_zum_menu)
+    zuruck_button.pack(side='top', anchor='nw', padx=10, pady=10)
     # GUI Aufbau
     tk.Label(fenster, textvariable=score_var, font=font_game).pack(pady=10)
     frame = tk.Frame(fenster, width=cols * 190, height=rows * 190)
