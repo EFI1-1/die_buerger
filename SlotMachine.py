@@ -1,5 +1,6 @@
 import tkinter as tk
 import random
+from PIL import Image, ImageTk
 
 def SlotMachineFenster(master):
     symbols = ['🍒', '🍋', '🔔', '🍀', '⭐', '7']
@@ -20,6 +21,20 @@ def SlotMachineFenster(master):
     fenster = tk.Toplevel(master)
     fenster.state('zoomed')
     fenster.title("Slot Maschine")
+
+
+    try:
+        bg = Image.open("assets/slotmachinebackground.png")
+        screen_width = fenster.winfo_screenwidth()
+        screen_height = fenster.winfo_screenheight()
+        bg = bg.resize((screen_width, screen_height), Image.LANCZOS)
+        bild_tk = ImageTk.PhotoImage(bg)
+
+        lbl_bg = tk.Label(fenster, image=bild_tk)
+        lbl_bg.image = bild_tk
+        lbl_bg.place(x=0, y=0, relwidth=1, relheight=1)
+    except Exception as e:
+        print("Fehler beim Laden des Hintergrunds:", e)
 
     result_var = tk.StringVar()
     score_var = tk.StringVar()
@@ -77,11 +92,11 @@ def SlotMachineFenster(master):
             multiplier = symbol_multipliers.get(win_symbol, 0)
             win_amount = bet_amount * multiplier
             draw_win_line(coords)
-            result_var.set(f"🎉 Gewinn! {win_symbol} x{multiplier} → +{win_amount} Punkte")
+            result_var.set(f"{win_symbol} x{multiplier} → +{win_amount} Punkte")
             ask_risk(win_amount)
         else:
             points -= bet_amount
-            result_var.set(f"Kein Gewinn -{bet_amount} Punkte")
+            result_var.set(f"-{bet_amount} Punkte")
 
         spin_counter += 1
         check_loan_repayment()
@@ -95,7 +110,7 @@ def SlotMachineFenster(master):
             line_item = None
 
         if bet_amount == 0:
-            result_var.set("Wähle dein Einsatz!")
+            result_var.set("Einsatz wählen!")
             return
         if points < bet_amount:
             prompt_loan()
@@ -125,7 +140,7 @@ def SlotMachineFenster(master):
         risk_win = tk.Toplevel(fenster)
         risk_win.title("Risiko-Spiel: Leiter")
 
-        tk.Label(risk_win, text="Risikoleiter – Versuch dein Glück!", font=("Arial", 28)).pack(pady=20)
+        tk.Label(risk_win, text="Risikoleiter", font=("Arial", 28)).pack(pady=20)
 
         amount_label = tk.Label(risk_win, text=f"{current_amount} Punkte", font=("Arial", 32))
         amount_label.pack(pady=20)
@@ -178,7 +193,7 @@ def SlotMachineFenster(master):
                 if current_step == len(steps) - 1:
                     points -= bet_amount
                     update_score()
-                    result_var.set(f"❌ Verloren -{bet_amount} Punkte.")
+                    result_var.set(f"-{bet_amount} Punkte.")
                     risk_win.destroy()
 
         def take_win():
