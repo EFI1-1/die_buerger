@@ -2,7 +2,6 @@ import tkinter as tk
 import random
 
 def SlotMachineFenster(master):
-    # Variablen
     symbols = ['🍒', '🍋', '🔔', '🍀', '⭐', '7']
     symbol_multipliers = {'🍒': 2, '🍋': 4, '🔔': 8, '🍀': 12, '⭐': 16, '7': 20}
     points = 1000
@@ -16,7 +15,8 @@ def SlotMachineFenster(master):
     symbol_items = []
     line_item = None
 
-    # Fenster
+    font_game = ("Press Start 2P", 24)
+
     fenster = tk.Toplevel(master)
     fenster.state('zoomed')
     fenster.title("Slot Maschine")
@@ -36,9 +36,9 @@ def SlotMachineFenster(master):
             row_canvases = []
             row_items = []
             for c in range(cols):
-                canvas = tk.Canvas(parent, width=140, height=140, bg="white")
-                canvas.grid(row=r, column=c, padx=8, pady=8)
-                item = canvas.create_text(70, 70, text='❓', font=('Arial', 72))
+                canvas = tk.Canvas(parent, width=180, height=180, bg="white")
+                canvas.grid(row=r, column=c, padx=10, pady=10)
+                item = canvas.create_text(90, 90, text='❓', font=("Arial", 60))
                 row_canvases.append(canvas)
                 row_items.append(item)
             symbol_canvases.append(row_canvases)
@@ -47,14 +47,16 @@ def SlotMachineFenster(master):
     def update_symbols(random_board):
         for r in range(rows):
             for c in range(cols):
-                symbol_canvases[r][c].itemconfig(symbol_items[r][c], text=random_board[r][c])
+                symbol = random_board[r][c]
+                font = ("Arial", 60) if symbol == '7' else ("Segoe UI Emoji", 60)
+                symbol_canvases[r][c].itemconfig(symbol_items[r][c], text=symbol, font=font)
 
     def draw_win_line(coords):
         nonlocal line_item
-        x0 = coords[0][1] * 156 + 70
-        y0 = coords[0][0] * 156 + 70
-        x1 = coords[2][1] * 156 + 70
-        y1 = coords[2][0] * 156 + 70
+        x0 = coords[0][1] * 190 + 90
+        y0 = coords[0][0] * 190 + 90
+        x1 = coords[2][1] * 190 + 90
+        y1 = coords[2][0] * 190 + 90
         line_item = line_canvas.create_line(x0, y0, x1, y1, fill='red', width=6)
 
     def check_win(board):
@@ -79,7 +81,7 @@ def SlotMachineFenster(master):
             ask_risk(win_amount)
         else:
             points -= bet_amount
-            result_var.set(f"Kein Gewinn 🚬 -{bet_amount} Punkte")
+            result_var.set(f"Kein Gewinn -{bet_amount} Punkte")
 
         spin_counter += 1
         check_loan_repayment()
@@ -120,15 +122,15 @@ def SlotMachineFenster(master):
         risk_win = tk.Toplevel(fenster)
         risk_win.title("Risiko-Spiel: Leiter")
 
-        tk.Label(risk_win, text="Risikoleiter – Versuch dein Glück!", font=("Arial", 28)).pack(pady=20)
-        amount_label = tk.Label(risk_win, text=f"{current_amount} Punkte", font=("Arial", 32))
+        tk.Label(risk_win, text="Risikoleiter – Versuch dein Glück!", font=font_game).pack(pady=20)
+        amount_label = tk.Label(risk_win, text=f"{current_amount} Punkte", font=font_game)
         amount_label.pack(pady=20)
 
         ladder_frame = tk.Frame(risk_win)
         ladder_frame.pack(pady=20)
         step_labels = []
         for i, val in enumerate(reversed(steps)):
-            lbl = tk.Label(ladder_frame, text=f"{val} Punkte", width=25, font=("Arial", 20), bg="gray")
+            lbl = tk.Label(ladder_frame, text=f"{val} Punkte", width=25, font=font_game, bg="gray")
             lbl.pack()
             step_labels.insert(0, lbl)
 
@@ -155,7 +157,7 @@ def SlotMachineFenster(master):
             else:
                 points -= bet_amount
                 update_score()
-                result_var.set(f"❌ Verloren -{bet_amount} Punkte.")
+                result_var.set(f"Verloren -{bet_amount} Punkte.")
                 risk_win.destroy()
 
         def take_win():
@@ -171,8 +173,8 @@ def SlotMachineFenster(master):
 
         button_frame = tk.Frame(risk_win)
         button_frame.pack(pady=20)
-        tk.Button(button_frame, text="Risiko", font=("Arial", 18), command=risk_try).pack(side='left', padx=40)
-        tk.Button(button_frame, text="Nehmen", font=("Arial", 18), command=take_win).pack(side='right', padx=40)
+        tk.Button(button_frame, text="Risiko", font=font_game, command=risk_try).pack(side='left', padx=40)
+        tk.Button(button_frame, text="Nehmen", font=font_game, command=take_win).pack(side='right', padx=40)
 
     def prompt_loan():
         def take_loan():
@@ -188,19 +190,19 @@ def SlotMachineFenster(master):
 
         loan_window = tk.Toplevel(fenster)
         loan_window.title("Bankkredit")
-        tk.Label(loan_window, text="Du hast keine Punkte mehr.\nMöchtest du ein Kredit von 1k aufnehmen?", font=("Arial", 20)).pack(pady=20)
-        tk.Button(loan_window, text="Ja", font=("Arial", 16), command=take_loan).pack(side='left', padx=20, pady=20)
-        tk.Button(loan_window, text="Exit", font=("Arial", 16), command=exit_game).pack(side='right', padx=20, pady=20)
+        tk.Label(loan_window, text="Du hast keine Punkte mehr.\nMöchtest du ein Kredit von 1k aufnehmen?", font=font_game).pack(pady=20)
+        tk.Button(loan_window, text="Ja", font=font_game, command=take_loan).pack(side='left', padx=20, pady=20)
+        tk.Button(loan_window, text="Exit", font=font_game, command=exit_game).pack(side='right', padx=20, pady=20)
 
     def check_loan_repayment():
         nonlocal points, loan_due_at, loan_taken
         if loan_taken and spin_counter >= loan_due_at:
             if points >= 1000:
                 points -= 1000
-                result_var.set("💰 Kredit zurückgezahlt.")
+                result_var.set("Kredit zurückgezahlt.")
                 loan_taken = False
             else:
-                result_var.set("❌ Kredit nicht zurückgezahlt.")
+                result_var.set("Kredit nicht zurückgezahlt.")
                 fenster.after(3000, fenster.destroy)
             update_score()
 
@@ -214,21 +216,21 @@ def SlotMachineFenster(master):
         window = tk.Toplevel(fenster)
         window.title("Einsatz wählen")
         for i, bet in enumerate(range(10, 201, 10)):
-            btn = tk.Button(window, text=f"{bet}", font=("Arial", 16), command=lambda b=bet, w=window: set_bet(b, w))
+            btn = tk.Button(window, text=f"{bet}", font=font_game, command=lambda b=bet, w=window: set_bet(b, w))
             btn.grid(row=i // 7, column=i % 7, padx=10, pady=10)
 
     # GUI Aufbau
-    tk.Label(fenster, textvariable=score_var, font=('Arial', 28)).pack(pady=10)
-    frame = tk.Frame(fenster, width=cols * 156, height=rows * 156)
+    tk.Label(fenster, textvariable=score_var, font=font_game).pack(pady=10)
+    frame = tk.Frame(fenster, width=cols * 190, height=rows * 190)
     frame.pack()
-    line_canvas = tk.Canvas(frame, width=cols * 156, height=rows * 156, highlightthickness=0)
+    line_canvas = tk.Canvas(frame, width=cols * 190, height=rows * 190, highlightthickness=0)
     line_canvas.place(x=0, y=0)
     create_slot_grid(frame)
 
-    tk.Button(fenster, text="Einsatz", font=('Arial', 24), command=open_bet_window).pack(pady=5)
-    tk.Label(fenster, textvariable=bet_display_var, font=('Arial', 24)).pack(pady=5)
-    spin_button = tk.Button(fenster, text="SPIN", font=('Arial', 32), command=spin_with_animation)
+    tk.Button(fenster, text="Einsatz", font=font_game, command=open_bet_window).pack(pady=5)
+    tk.Label(fenster, textvariable=bet_display_var, font=font_game).pack(pady=5)
+    spin_button = tk.Button(fenster, text="SPIN", font=font_game, command=spin_with_animation)
     spin_button.pack(pady=20)
-    tk.Label(fenster, textvariable=result_var, font=('Arial', 24)).pack(pady=10)
+    tk.Label(fenster, textvariable=result_var, font=font_game).pack(pady=10)
 
     update_score()
