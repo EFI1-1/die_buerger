@@ -17,7 +17,7 @@ root.geometry("400x300")  # Fenstergröße festlegen
 root.state('zoomed')
 
 # Bild laden
-bild = Image.open("krone.png")   # Datei: PNG, JPG, etc.
+bild = Image.open("assets/krone.png")   # Datei: PNG, JPG, etc.
 bild = bild.resize((90, 90))        # Optional: Größe anpassen
 bild_tk = ImageTk.PhotoImage(bild)    # Konvertieren für Tkinter
 
