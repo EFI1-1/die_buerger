@@ -15,7 +15,7 @@ def SlotMachineFenster(master):
     symbol_items = []
     line_item = None
 
-    font_game = ("Press Start 2P", 24)
+    font_game = ("Press Start 2P", 18)
 
     fenster = tk.Toplevel(master)
     fenster.state('zoomed')
