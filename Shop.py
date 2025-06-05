@@ -1,4 +1,5 @@
 import tkinter as tk
+from PIL import Image, ImageTk
 
 class ShopFenster:
     def __init__(self, master):
@@ -10,29 +11,65 @@ class ShopFenster:
 
         tk.Label(self.fenster, text="Willkomen im Shop!", font=("Press Start 2P", 40)).pack(pady=20)
 
-        lbl_Item1 = tk.Label(self.fenster,bg="blue", font=("Press Start 2P", 1), width= 120, height= 120)
+#Item 1
+        Munze = Image.open("assets/Munze.png")  # Datei: PNG, JPG, etc.
+        Munze = Munze.resize((250, 250))  # Optional: Größe anpassen
+        bild_tk = ImageTk.PhotoImage(Munze)  # Konvertieren für Tkinter
+
+        lbl_Item1 = tk.Label(self.fenster, image=bild_tk,bg="black", font=("Press Start 2P", 1), width= 250, height= 250)
+        lbl_Item1.image = bild_tk  # WICHTIG: Referenz speichern!
         lbl_Item1.place(x=250, y=100)  # Position in Pixeln (x= Breite Y= Höhe)
 
-        Btn_Item1 = tk.Button(self.fenster, text="SLOTTI KAROTTI", font=("Press Start 2P", 10), relief="solid", bd=3,width=30, height=1, bg="lightgrey")
-        Btn_Item1.place(x=250, y=470)
+        Btn_Item1 = tk.Button(self.fenster, text="1k Pissgroschen kaufen", font=("Press Start 2P", 7), relief="solid", bd=3,width=27, height=2, bg="lightgrey")
+        Btn_Item1.place(x=250, y=360)
 
-        lbl_Item2 = tk.Label(self.fenster,bg="blue", font=("Press Start 2P", 1), width= 120, height= 120)
-        lbl_Item2.place(x=500, y=100)  # Position in Pixeln (x= Breite Y= Höhe)
+#Item 2
+        Munze_haufen = Image.open("assets/Munzen_haufen.png")  # Datei: PNG, JPG, etc.
+        Munze_haufen = Munze_haufen.resize((250, 250))  # Optional: Größe anpassen
+        bild_tk = ImageTk.PhotoImage(Munze_haufen)  # Konvertieren für Tkinter
 
-        lbl_Item3 = tk.Label(self.fenster,bg="blue", font=("Press Start 2P", 1), width= 260, height= 120)
-        lbl_Item3.place(x=750, y=100)  # Position in Pixeln (x= Breite Y= Höhe)
+        lbl_Item2 = tk.Label(self.fenster, image=bild_tk, bg="black", font=("Press Start 2P", 1), width=250, height=250)
+        lbl_Item2.image = bild_tk  # WICHTIG: Referenz speichern!
+        lbl_Item2.place(x=510, y=100)  # Position in Pixeln (x= Breite Y= Höhe)
 
-        lbl_Item4 = tk.Label(self.fenster,bg="blue", font=("Press Start 2P", 1), width= 120, height= 60)
-        lbl_Item4.place(x=250, y=500)  # Position in Pixeln (x= Breite Y= Höhe)
+        Btn_Item2 = tk.Button(self.fenster, text="10k Pissgroschen kaufen", font=("Press Start 2P", 7), relief="solid",bd=3, width=27, height=2, bg="lightgrey")
+        Btn_Item2.place(x=510, y=360)
 
-        lbl_Item5 = tk.Label(self.fenster,bg="blue", font=("Press Start 2P", 1), width= 120, height= 60)
-        lbl_Item5.place(x=500, y=500)  # Position in Pixeln (x= Breite Y= Höhe)
+# Item 3
+        Munze_toilette = Image.open("assets/Munze_toilette.png")  # Datei: PNG, JPG, etc.
+        Munze_toilette = Munze_toilette.resize((250, 250))  # Optional: Größe anpassen
+        bild_tk = ImageTk.PhotoImage(Munze_toilette)  # Konvertieren für Tkinter
 
-        lbl_Item6 = tk.Label(self.fenster,bg="blue", font=("Press Start 2P", 1), width= 260, height= 60)
-        lbl_Item6.place(x=750, y=500)  # Position in Pixeln (x= Breite Y= Höhe)
+        lbl_Item3 = tk.Label(self.fenster, image=bild_tk, bg="black", font=("Press Start 2P", 1), width=250, height=250)
+        lbl_Item3.image = bild_tk  # WICHTIG: Referenz speichern!
+        lbl_Item3.place(x=770, y=100)  # Position in Pixeln (x= Breite Y= Höhe)
+
+        Btn_Item3 = tk.Button(self.fenster, text="25k Pissgroschen kaufen", font=("Press Start 2P", 7), relief="solid",bd=3, width=27, height=2, bg="lightgrey")
+        Btn_Item3.place(x=770, y=360)
+
+# Item 4
+        Munze_boot = Image.open("assets/Munzen_boot.png")  # Datei: PNG, JPG, etc.
+        Munze_boot = Munze_boot.resize((250, 250))  # Optional: Größe anpassen
+        bild_tk = ImageTk.PhotoImage(Munze_boot)  # Konvertieren für Tkinter
+
+        lbl_Item4 = tk.Label(self.fenster, image=bild_tk, bg="black", font=("Press Start 2P", 1), width=250, height=250)
+        lbl_Item4.image = bild_tk  # WICHTIG: Referenz speichern!
+        lbl_Item4.place(x=1030, y=100)  # Position in Pixeln (x= Breite Y= Höhe)
+
+        Btn_Item4 = tk.Button(self.fenster, text="50k Pissgroschen kaufen", font=("Press Start 2P", 7), relief="solid",bd=3, width=27, height=2, bg="lightgrey")
+        Btn_Item4.place(x=1030, y=360)
+
+
+
+
+
+
+
+
 
         # Button zum Zurückkehren
         tk.Button(self.fenster, text="Zurück zum Menü", command=self.zurück).pack(pady=20)
+
 
     def zurück(self):
         self.fenster.destroy()  # Shop-Fenster schließen
