@@ -215,6 +215,7 @@ def SlotMachineFenster(master):
 
     def prompt_loan():
         def take_loan():
+            spin_button.config(state='normal')
             nonlocal points, loan_taken, loan_due_at, spin_counter
             points += 1000
             loan_taken = True
@@ -227,6 +228,7 @@ def SlotMachineFenster(master):
 
         loan_window = tk.Toplevel(fenster)
         loan_window.title("Bankkredit")
+        spin_button.config(state='disabled')
         tk.Label(loan_window, text="Du hast keine Punkte mehr.\nMöchtest du ein Kredit von 1k aufnehmen?", font=font_game).pack(pady=20)
         tk.Button(loan_window, text="Ja", font=font_game, command=take_loan).pack(side='left', padx=20, pady=20)
         tk.Button(loan_window, text="Exit", font=font_game, command=exit_game).pack(side='right', padx=20, pady=20)
