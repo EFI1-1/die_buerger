@@ -27,7 +27,15 @@ class ShopFenster:
         lbl_bg.place(x=0, y=0, relwidth=1, relheight=1)
 
 #header
-        tk.Label(self.fenster, text="Willkomen im Shop!", font=("Press Start 2P", 40)).pack(pady=20)
+        frame_lang = Image.open("assets/frame_lang.png")  # Datei: PNG, JPG, etc.
+        frame_lang = frame_lang.resize((1000, 100))  # Optional: Größe anpassen
+        bild_tk = ImageTk.PhotoImage(frame_lang)  # Konvertieren für Tkinter
+
+        lbl_Item1 = tk.Label(self.fenster, image=bild_tk,bg="black", font=("Press Start 2P", 1), width= 1000, height= 100)
+        lbl_Item1.image = bild_tk  # WICHTIG: Referenz speichern!
+        lbl_Item1.place(x=270, y=9)  # Position in Pixeln (x= Breite Y= Höhe)
+
+        tk.Label(self.fenster, text="Willkomen im Shop!", font=("Press Start 2P", 40), bg = "#A67C52").pack(pady=20)
 
 #Item 1
         Munze = Image.open("assets/Munze.png")  # Datei: PNG, JPG, etc.
@@ -36,10 +44,10 @@ class ShopFenster:
 
         lbl_Item1 = tk.Label(self.fenster, image=bild_tk,bg="black", font=("Press Start 2P", 1), width= 250, height= 250)
         lbl_Item1.image = bild_tk  # WICHTIG: Referenz speichern!
-        lbl_Item1.place(x=250, y=200)  # Position in Pixeln (x= Breite Y= Höhe)
+        lbl_Item1.place(x=250, y=250)  # Position in Pixeln (x= Breite Y= Höhe)
 
-        Btn_Item1 = tk.Button(self.fenster, text="1k Pissgroschen kaufen", font=("Press Start 2P", 7), relief="solid", bd=3,width=27, height=2, bg="lightgrey")
-        Btn_Item1.place(x=250, y=460)
+        Btn_Item1 = tk.Button(self.fenster, text="1k Pissgroschen kaufen", font=("Press Start 2P", 7), relief="solid", bd=3,width=27, height=2, bg="#A67C52")
+        Btn_Item1.place(x=250, y=510)
 
 #Item 2
         Munze_haufen = Image.open("assets/Munzen_haufen.png")  # Datei: PNG, JPG, etc.
@@ -48,10 +56,10 @@ class ShopFenster:
 
         lbl_Item2 = tk.Label(self.fenster, image=bild_tk, bg="black", font=("Press Start 2P", 1), width=250, height=250)
         lbl_Item2.image = bild_tk  # WICHTIG: Referenz speichern!
-        lbl_Item2.place(x=510, y=200)  # Position in Pixeln (x= Breite Y= Höhe)
+        lbl_Item2.place(x=510, y=250)  # Position in Pixeln (x= Breite Y= Höhe)
 
-        Btn_Item2 = tk.Button(self.fenster, text="10k Pissgroschen kaufen", font=("Press Start 2P", 7), relief="solid",bd=3, width=27, height=2, bg="lightgrey")
-        Btn_Item2.place(x=510, y=460)
+        Btn_Item2 = tk.Button(self.fenster, text="10k Pissgroschen kaufen", font=("Press Start 2P", 7), relief="solid",bd=3, width=27, height=2, bg="#A67C52")
+        Btn_Item2.place(x=510, y=510)
 
 # Item 3
         Munze_toilette = Image.open("assets/Munze_toilette.png")  # Datei: PNG, JPG, etc.
@@ -60,10 +68,10 @@ class ShopFenster:
 
         lbl_Item3 = tk.Label(self.fenster, image=bild_tk, bg="black", font=("Press Start 2P", 1), width=250, height=250)
         lbl_Item3.image = bild_tk  # WICHTIG: Referenz speichern!
-        lbl_Item3.place(x=770, y=200)  # Position in Pixeln (x= Breite Y= Höhe)
+        lbl_Item3.place(x=770, y=250)  # Position in Pixeln (x= Breite Y= Höhe)
 
-        Btn_Item3 = tk.Button(self.fenster, text="25k Pissgroschen kaufen", font=("Press Start 2P", 7), relief="solid",bd=3, width=27, height=2, bg="lightgrey")
-        Btn_Item3.place(x=770, y=460)
+        Btn_Item3 = tk.Button(self.fenster, text="25k Pissgroschen kaufen", font=("Press Start 2P", 7), relief="solid",bd=3, width=27, height=2, bg="#A67C52")
+        Btn_Item3.place(x=770, y=510)
 
 # Item 4
         Munze_boot = Image.open("assets/Munzen_boot.png")  # Datei: PNG, JPG, etc.
@@ -72,10 +80,10 @@ class ShopFenster:
 
         lbl_Item4 = tk.Label(self.fenster, image=bild_tk, bg="black", font=("Press Start 2P", 1), width=250, height=250)
         lbl_Item4.image = bild_tk  # WICHTIG: Referenz speichern!
-        lbl_Item4.place(x=1030, y=200)  # Position in Pixeln (x= Breite Y= Höhe)
+        lbl_Item4.place(x=1030, y=250)  # Position in Pixeln (x= Breite Y= Höhe)
 
-        Btn_Item4 = tk.Button(self.fenster, text="50k Pissgroschen kaufen", font=("Press Start 2P", 7), relief="solid",bd=3, width=27, height=2, bg="lightgrey")
-        Btn_Item4.place(x=1030, y=460)
+        Btn_Item4 = tk.Button(self.fenster, text="50k Pissgroschen kaufen", font=("Press Start 2P", 7), relief="solid",bd=3, width=27, height=2, bg="#A67C52")
+        Btn_Item4.place(x=1030, y=510)
 
 
 
@@ -86,8 +94,9 @@ class ShopFenster:
 
 
         # Button zum Zurückkehren
-        tk.Button(self.fenster, text="⬅️Menü",font=("Press Start 2P", 20), command=self.zurück).pack(side='top', anchor='nw', padx=10, pady=10)
 
+        Btn_zuruck = tk.Button(self.fenster, text="⬅️Menü", font=("Press Start 2P", 20),bg = "#A67C52", relief="solid",bd=3, width=7, height=1, command=self.zurück)
+        Btn_zuruck.place(x=10, y=10)
 
     def zurück(self):
         self.fenster.destroy()  # Shop-Fenster schließen
