@@ -130,18 +130,29 @@ def SlotMachineFenster(master):
         animate(0)
 
     def ask_risk(win_amount):
-        # Erstellt die Stufen der Risikoleiter
-        steps = [win_amount * (2 ** i) for i in range(6)]
-        steps.append(0)  # Unterste Stufe 0 Punkte hinzufügen!
-        current_step = 0  # Start auf Stufe 0 (kleinster Gewinn > 0)
+        global blink_state, win_step, lose_step
+        blink_state = 0
+        win_step = None
+        lose_step = None
 
+        steps = [win_amount * (2 ** i) for i in range(6)]  # 40, 80, 160, ...
+        steps.append(0)  # 0 Punkte unten
+
+        display_steps = steps[:-1][::-1] + [0]  # für Anzeige: größter Gewinn oben, 0 unten
+
+        # Map: Display-Index zu echtem Steps-Index
+        display_to_step = list(range(len(steps) - 2, -1, -1)) + [len(steps) - 1]
+        # z.B. [5,4,3,2,1,0,6] für 6 Stufen + 0
+
+        current_display_step = len(display_steps) - 2  # Start auf 40 (zweitunterste Stufe!)
+
+        current_step = display_to_step[current_display_step]
         current_amount = steps[current_step]
 
         risk_win = tk.Toplevel(fenster)
         risk_win.title("Risiko-Spiel: Leiter")
 
-        tk.Label(risk_win, text="Risikoleiter", font=("Arial", 28)).pack(pady=20)
-
+        tk.Label(risk_win, text="Risikoleiter – Versuch dein Glück!", font=("Arial", 28)).pack(pady=20)
         amount_label = tk.Label(risk_win, text=f"{current_amount} Punkte", font=("Arial", 32))
         amount_label.pack(pady=20)
 
@@ -149,60 +160,80 @@ def SlotMachineFenster(master):
         ladder_frame.pack(pady=20)
         step_labels = []
 
-        # 🟢 KEIN reversed(steps) → Normale Reihenfolge: Großer Gewinn oben, 0 unten
-        for i, val in enumerate(steps[::-1]):  # Schritte rückwärts, damit 0 unten ist
+        for val in display_steps:
             lbl = tk.Label(ladder_frame, text=f"{val} Punkte", width=25, font=("Arial", 20), bg="gray")
             lbl.pack()
-            step_labels.append(lbl)  # Hier normale Reihenfolge beibehalten
+            step_labels.append(lbl)
 
         def update_lights():
-            """Aktualisiert die Farben der Stufen."""
+            global blink_state, win_step, lose_step
             for i, lbl in enumerate(step_labels):
-                lbl.config(bg="yellow" if i == (len(steps) - 1 - current_step) else "lightgray")
-            amount_label.config(text=f"{current_amount} Punkte")
+                lbl.config(bg="lightgray")  # Reset all
+
+            # Aktuelle Stufe GELB
+            step_labels[current_display_step].config(bg="yellow")
+
+            win_step = None
+            lose_step = None
+
+            if current_display_step > 0:
+                win_step = current_display_step - 1
+
+            if current_display_step <= len(display_steps) - 3:
+                lose_step = current_display_step + 2
+            else:
+                lose_step = len(display_steps) - 1
+
+            amount_label.config(text=f"{steps[display_to_step[current_display_step]]} Punkte")
 
         def blink_current():
-            """Blinkt die aktuelle Stufe."""
-            if current_step < len(step_labels):
-                lbl = step_labels[len(steps) - 1 - current_step]
-                current_color = lbl.cget("bg")
-                lbl.config(bg="yellow" if current_color == "lightgray" else "lightgray")
+            global blink_state, win_step, lose_step
+            if current_display_step < len(step_labels):
+                # Erst ALLES außer aktuelle Stufe zurücksetzen
+                for i, lbl in enumerate(step_labels):
+                    if i != current_display_step:
+                        lbl.config(bg="lightgray")
+
+                # Dann Gewinn oder Verlust blinken lassen
+                if blink_state == 0 and win_step is not None:
+                    step_labels[win_step].config(bg="yellow")
+                elif blink_state == 1 and lose_step is not None:
+                    step_labels[lose_step].config(bg="yellow")
+
+                # Wechsel den Blink-Zustand
+                blink_state = 1 - blink_state
+
                 risk_win.after(500, blink_current)
 
         def risk_try():
-            """Risiko-Klick."""
-            nonlocal current_step, current_amount, points
-            if current_step >= len(steps) - 2:  # Höchste Stufe erreicht
+            nonlocal current_display_step, current_step, current_amount, points
+            if current_display_step == 0:  # Oben -> kein höherer Gewinn
                 return
 
-            if random.choice([True, False]):  # 50/50 Chance
-                current_step += 1
-                current_amount = steps[current_step]
-                update_lights()
+            if random.choice([True, False]):
+                current_display_step -= 1  # eine Stufe nach oben
             else:
-                # Zwei Stufen zurückfallen
-                if current_step >= 2:
-                    current_step -= 2
+                if current_display_step <= len(display_steps) - 3:
+                    current_display_step += 2  # zwei Stufen zurück
                 else:
-                    current_step = len(steps) - 1  # 0 Punkte (letzter Index)
+                    current_display_step = len(display_steps) - 1  # auf 0 Punkte
 
-                current_amount = steps[current_step]
-                update_lights()
+            current_step = display_to_step[current_display_step]
+            current_amount = steps[current_step]
+            update_lights()
 
-                # Prüfen ob auf 0 Punkte
-                if current_step == len(steps) - 1:
-                    points -= bet_amount
-                    update_score()
-                    result_var.set(f"-{bet_amount} Punkte.")
-                    risk_win.destroy()
+            if current_step == len(steps) - 1:  # 0 Punkte erreicht
+                points -= bet_amount
+                update_score()
+                result_var.set(f"❌ Verloren -{bet_amount} Punkte.")
+                risk_win.destroy()
 
         def take_win():
-            """Gewinn mitnehmen."""
             nonlocal points
             points -= bet_amount
             points += current_amount
             update_score()
-            result_var.set(f"+{current_amount} Punkte.")
+            result_var.set(f"✅ {current_amount} Punkte.")
             risk_win.destroy()
 
         update_lights()
