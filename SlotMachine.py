@@ -202,7 +202,7 @@ def SlotMachineFenster(master):
             points -= bet_amount
             points += current_amount
             update_score()
-            result_var.set(f"✅ {current_amount} Punkte.")
+            result_var.set(f"+{current_amount} Punkte.")
             risk_win.destroy()
 
         update_lights()
